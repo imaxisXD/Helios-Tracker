@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, ScrollView, Pressable, Dimensions, Platform } from 'react-native';
+import { View, Text, ScrollView, Pressable, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useFitnessData } from '@/hooks/use-fitness-data';
@@ -23,17 +23,10 @@ import {
   formatTime,
   formatDuration,
 } from '@/lib/date-utils';
+import { triggerHaptic } from '@/lib/haptics';
+import { ACCENT_RIPPLE } from '@/lib/press-styles';
 
 const screenWidth = Dimensions.get('window').width;
-
-async function triggerHaptic() {
-  if (Platform.OS === 'ios') {
-    try {
-      const Haptics = await import('expo-haptics');
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {}
-  }
-}
 
 export default function ActivityDayDetailScreen() {
   const { date } = useLocalSearchParams<{ date: string }>();
@@ -110,12 +103,14 @@ export default function ActivityDayDetailScreen() {
       >
         <Pressable
           onPress={() => { triggerHaptic(); router.back(); }}
+          android_ripple={ACCENT_RIPPLE}
           style={({ pressed }) => ({
             alignSelf: 'flex-start',
             paddingVertical: HeliosSpacing.xs,
             paddingRight: HeliosSpacing.md,
             opacity: pressed ? 0.6 : 1,
             marginBottom: HeliosSpacing.sm,
+            borderRadius: 8,
           })}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>

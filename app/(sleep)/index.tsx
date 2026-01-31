@@ -22,6 +22,7 @@ import { formatShortDate, getRelativeDay } from '@/lib/date-utils';
 import { ScoreRing } from '@/components/ui/score-ring';
 import { getSleepScoreColor } from '@/lib/sleep-score';
 import { formatSleepDuration } from '@/lib/sleep-need';
+import { CARD_RIPPLE, PRESS_SCALE } from '@/lib/press-styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -445,7 +446,14 @@ export default function SleepScreen() {
                   href={`/(sleep)/night/${night.date}`}
                   asChild
                 >
-                  <Pressable>
+                  <Pressable
+                    android_ripple={CARD_RIPPLE}
+                    style={({ pressed }) => ({
+                      borderRadius: HeliosSpacing.cardRadius,
+                      overflow: 'hidden' as const,
+                      transform: [{ scale: pressed ? PRESS_SCALE : 1 }],
+                    })}
+                  >
                     {({ pressed }) => (
                       <BrutalistCard
                         style={{ opacity: pressed ? 0.92 : 1 }}

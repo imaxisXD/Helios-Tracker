@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, type ViewStyle } from 'react-native';
 import { HeliosColors, HeliosFonts, HeliosSpacing } from '@/constants/theme';
+import { CARD_RIPPLE, PRESS_SCALE } from '@/lib/press-styles';
 
 type BrutalistCardProps = {
   children: React.ReactNode;
@@ -95,9 +96,13 @@ export function BrutalistCard({
     return (
       <Pressable
         onPress={onPress}
+        android_ripple={CARD_RIPPLE}
         style={({ pressed }) => [
           cardStyle,
-          { opacity: pressed ? 0.92 : 1 },
+          {
+            opacity: pressed ? 0.92 : 1,
+            transform: [{ scale: pressed ? PRESS_SCALE : 1 }],
+          },
         ]}
       >
         {content}

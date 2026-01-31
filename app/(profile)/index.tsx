@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { View, Text, ScrollView, Pressable, Modal, TextInput } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { useFitnessData } from '@/hooks/use-fitness-data';
 import { useComputedStats } from '@/hooks/use-computed-stats';
 import {
   HeliosColors,
+  HeliosFonts,
   HeliosTypography,
   HeliosSpacing,
 } from '@/constants/theme';
@@ -25,6 +27,9 @@ import { ScoreRing } from '@/components/ui/score-ring';
 import { getRecoveryColor } from '@/lib/recovery';
 import { getStrainColor } from '@/lib/strain';
 import { getVO2MaxColor } from '@/lib/vo2max';
+import { CARD_RIPPLE, PRESS_SCALE } from '@/lib/press-styles';
+import { triggerHaptic } from '@/lib/haptics';
+import type { User } from '@/lib/data-types';
 
 function calculateAge(birthday: string): number {
   // birthday format: "YYYY-MM"
@@ -61,7 +66,13 @@ interface SportGroupSummary {
 }
 
 export default function ProfileScreen() {
-  const { user, body, sport, recoveryDaily, strainDaily } = useFitnessData();
+  const { user, body, sport, recoveryDaily, strainDaily, dataSource, updateProfile } = useFitnessData();
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editHeight, setEditHeight] = useState('');
+  const [editWeight, setEditWeight] = useState('');
+  const [editBirthday, setEditBirthday] = useState('');
+  const [editGender, setEditGender] = useState(0);
   const {
     totalSteps,
     totalDistance,
@@ -141,6 +152,31 @@ export default function ProfileScreen() {
     return Array.from(map.values()).sort((a, b) => b.count - a.count);
   }, [sport]);
 
+  function openEditModal() {
+    setEditName(profile?.nickName ?? '');
+    setEditHeight(profile?.height ? `${profile.height}` : '');
+    setEditWeight(profile?.weight ? `${profile.weight}` : '');
+    setEditBirthday(profile?.birthday ?? '');
+    setEditGender(profile?.gender ?? 0);
+    setEditModalVisible(true);
+    triggerHaptic();
+  }
+
+  async function handleSaveProfile() {
+    const updated: User = {
+      userId: profile?.userId ?? 'local',
+      nickName: editName.trim() || 'User',
+      height: parseFloat(editHeight) || 0,
+      weight: parseFloat(editWeight) || 0,
+      birthday: editBirthday.trim(),
+      gender: editGender,
+      avatar: profile?.avatar ?? '',
+    };
+    await updateProfile(updated);
+    setEditModalVisible(false);
+    triggerHaptic();
+  }
+
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: HeliosColors.background }}
@@ -162,6 +198,34 @@ export default function ProfileScreen() {
         >
           {'PROFILE'}
         </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: HeliosSpacing.sm,
+            marginTop: HeliosSpacing.xs,
+          }}
+        >
+          <View
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: 4,
+              backgroundColor:
+                dataSource === 'health-connect'
+                  ? HeliosColors.accent
+                  : HeliosColors.textSecondary,
+            }}
+          />
+          <Text
+            style={{
+              ...HeliosTypography.label,
+              color: HeliosColors.textSecondary,
+            }}
+          >
+            {dataSource === 'health-connect' ? 'HEALTH CONNECT' : 'LOCAL CSV'}
+          </Text>
+        </View>
       </Animated.View>
 
       {/* User info card */}
@@ -273,19 +337,52 @@ export default function ProfileScreen() {
               </Text>
             </View>
           </View>
-          <DecorativeBarcode width={180} height={28} label="USER ID" />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: HeliosSpacing.sm }}>
+            <DecorativeBarcode width={140} height={28} label="USER ID" />
+            <Pressable
+              onPress={openEditModal}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 4,
+                paddingVertical: HeliosSpacing.xs,
+                paddingHorizontal: HeliosSpacing.sm,
+              }}
+            >
+              <Ionicons name="create-sharp" size={14} color={HeliosColors.textOnCardMuted} />
+              <Text style={{ ...HeliosTypography.label, color: HeliosColors.textOnCardMuted }}>
+                {'EDIT'}
+              </Text>
+            </Pressable>
+          </View>
         </BrutalistCard>
       ) : (
-        <View style={{ marginBottom: HeliosSpacing.cardGap }}>
-          <Text
-            style={{
-              ...HeliosTypography.body,
-              color: HeliosColors.textSecondary,
-            }}
-          >
-            {'No user data available.'}
-          </Text>
-        </View>
+        <Pressable onPress={openEditModal}>
+          <BrutalistCard style={{ marginBottom: HeliosSpacing.cardGap }}>
+            <View style={{ alignItems: 'center', paddingVertical: HeliosSpacing.lg }}>
+              <Ionicons name="person-add-sharp" size={32} color={HeliosColors.accent} />
+              <Text
+                style={{
+                  ...HeliosTypography.cardTitle,
+                  color: HeliosColors.textOnCard,
+                  marginTop: HeliosSpacing.md,
+                }}
+              >
+                {'SET UP PROFILE'}
+              </Text>
+              <Text
+                style={{
+                  ...HeliosTypography.bodySmall,
+                  color: HeliosColors.textOnCardMuted,
+                  marginTop: HeliosSpacing.xs,
+                  textAlign: 'center',
+                }}
+              >
+                {'Tap to add your name, height, weight, and birthday.'}
+              </Text>
+            </View>
+          </BrutalistCard>
+        </Pressable>
       )}
       </Animated.View>
 
@@ -492,61 +589,214 @@ export default function ProfileScreen() {
                 href={`/(profile)/sport/${group.type}`}
                 asChild
               >
-                <BrutalistCard
-                  onPress={() => {}}
-                  verticalText={group.name.toUpperCase()}
+                <Pressable
+                  android_ripple={CARD_RIPPLE}
+                  style={({ pressed }) => ({
+                    borderRadius: HeliosSpacing.cardRadius,
+                    overflow: 'hidden' as const,
+                    opacity: pressed ? 0.92 : 1,
+                    transform: [{ scale: pressed ? PRESS_SCALE : 1 }],
+                  })}
                 >
-                  <View style={{ paddingRight: 28 }}>
-                    <Text
-                      style={{
-                        ...HeliosTypography.cardTitle,
-                        color: HeliosColors.textOnCard,
-                        marginBottom: HeliosSpacing.sm,
-                      }}
-                    >
-                      {group.name}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        gap: HeliosSpacing.md,
-                      }}
-                    >
-                      <MetricBlock
-                        value={`${group.count}`}
-                        label="SESSIONS"
-                        size="small"
-                        onCard
-                      />
-                      <MetricBlock
-                        value={formatDurationSeconds(group.totalTime)}
-                        label="TOTAL TIME"
-                        size="small"
-                        onCard
-                      />
-                      {group.totalDistance > 0 ? (
+                  <BrutalistCard
+                    verticalText={group.name.toUpperCase()}
+                  >
+                    <View style={{ paddingRight: 28 }}>
+                      <Text
+                        style={{
+                          ...HeliosTypography.cardTitle,
+                          color: HeliosColors.textOnCard,
+                          marginBottom: HeliosSpacing.sm,
+                        }}
+                      >
+                        {group.name}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          gap: HeliosSpacing.md,
+                        }}
+                      >
                         <MetricBlock
-                          value={formatDistance(group.totalDistance)}
-                          label="DISTANCE"
+                          value={`${group.count}`}
+                          label="SESSIONS"
                           size="small"
                           onCard
                         />
-                      ) : null}
-                      <MetricBlock
-                        value={formatCalories(group.totalCalories)}
-                        label="CALORIES"
-                        size="small"
-                        onCard
-                      />
+                        <MetricBlock
+                          value={formatDurationSeconds(group.totalTime)}
+                          label="TOTAL TIME"
+                          size="small"
+                          onCard
+                        />
+                        {group.totalDistance > 0 ? (
+                          <MetricBlock
+                            value={formatDistance(group.totalDistance)}
+                            label="DISTANCE"
+                            size="small"
+                            onCard
+                          />
+                        ) : null}
+                        <MetricBlock
+                          value={formatCalories(group.totalCalories)}
+                          label="CALORIES"
+                          size="small"
+                          onCard
+                        />
+                      </View>
                     </View>
-                  </View>
-                </BrutalistCard>
+                  </BrutalistCard>
+                </Pressable>
               </Link>
             ))}
           </View>
         </View>
       ) : null}
+
+      {/* Edit Profile Modal */}
+      <Modal
+        visible={editModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'flex-end' }}>
+          <View
+            style={{
+              backgroundColor: HeliosColors.cardLight,
+              borderTopLeftRadius: HeliosSpacing.cardRadius * 2,
+              borderTopRightRadius: HeliosSpacing.cardRadius * 2,
+              padding: HeliosSpacing.screenPadding,
+              paddingBottom: HeliosSpacing.xxl,
+            }}
+          >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: HeliosSpacing.lg }}>
+              <Text style={{ ...HeliosTypography.sectionTitle, color: HeliosColors.textOnCard }}>
+                {'EDIT PROFILE'}
+              </Text>
+              <Pressable onPress={() => setEditModalVisible(false)} hitSlop={12}>
+                <Ionicons name="close-sharp" size={24} color={HeliosColors.textOnCard} />
+              </Pressable>
+            </View>
+
+            <ProfileField label="NAME" value={editName} onChangeText={setEditName} />
+            <ProfileField label="HEIGHT (CM)" value={editHeight} onChangeText={setEditHeight} keyboardType="numeric" />
+            <ProfileField label="WEIGHT (KG)" value={editWeight} onChangeText={setEditWeight} keyboardType="numeric" />
+            <ProfileField label="BIRTHDAY (YYYY-MM)" value={editBirthday} onChangeText={setEditBirthday} placeholder="1995-06" />
+
+            <Text style={{ ...HeliosTypography.label, color: HeliosColors.textOnCardMuted, marginBottom: HeliosSpacing.sm, marginTop: HeliosSpacing.md }}>
+              {'GENDER'}
+            </Text>
+            <View style={{ flexDirection: 'row', gap: HeliosSpacing.sm, marginBottom: HeliosSpacing.lg }}>
+              {[
+                { value: 1, label: 'MALE' },
+                { value: 2, label: 'FEMALE' },
+                { value: 0, label: 'OTHER' },
+              ].map((opt) => (
+                <Pressable
+                  key={opt.value}
+                  onPress={() => setEditGender(opt.value)}
+                  style={{
+                    flex: 1,
+                    paddingVertical: HeliosSpacing.sm,
+                    borderRadius: HeliosSpacing.sm,
+                    backgroundColor: editGender === opt.value ? HeliosColors.accent : HeliosColors.cardBorder,
+                    alignItems: 'center',
+                    borderCurve: 'continuous',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: HeliosFonts.mono,
+                      fontSize: 12,
+                      letterSpacing: 1,
+                      color: editGender === opt.value ? HeliosColors.background : HeliosColors.textOnCardMuted,
+                    }}
+                  >
+                    {opt.label}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+
+            <Pressable
+              onPress={handleSaveProfile}
+              style={{
+                backgroundColor: HeliosColors.accent,
+                paddingVertical: HeliosSpacing.md,
+                borderRadius: HeliosSpacing.sm,
+                alignItems: 'center',
+                borderCurve: 'continuous',
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: HeliosFonts.mono,
+                  fontSize: 14,
+                  fontWeight: '600',
+                  letterSpacing: 1.5,
+                  color: HeliosColors.background,
+                }}
+              >
+                {'SAVE PROFILE'}
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Profile field component
+// ---------------------------------------------------------------------------
+
+function ProfileField({
+  label,
+  value,
+  onChangeText,
+  keyboardType,
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  keyboardType?: 'default' | 'numeric';
+  placeholder?: string;
+}) {
+  return (
+    <View style={{ marginBottom: HeliosSpacing.md }}>
+      <Text
+        style={{
+          fontFamily: HeliosFonts.mono,
+          fontSize: 11,
+          letterSpacing: 1.5,
+          textTransform: 'uppercase',
+          color: HeliosColors.textOnCardMuted,
+          marginBottom: HeliosSpacing.xs,
+        }}
+      >
+        {label}
+      </Text>
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        keyboardType={keyboardType ?? 'default'}
+        placeholder={placeholder}
+        placeholderTextColor={HeliosColors.textOnCardMuted}
+        style={{
+          fontFamily: HeliosFonts.mono,
+          fontSize: 16,
+          color: HeliosColors.textOnCard,
+          backgroundColor: HeliosColors.cardBorder,
+          paddingHorizontal: HeliosSpacing.md,
+          paddingVertical: HeliosSpacing.sm + 2,
+          borderRadius: HeliosSpacing.sm,
+          borderCurve: 'continuous',
+        }}
+      />
+    </View>
   );
 }

@@ -7,6 +7,7 @@ export default function HeartLayout() {
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: HeliosColors.background },
+        animation: 'slide_from_right',
       }}
     />
   );

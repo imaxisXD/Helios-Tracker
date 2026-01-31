@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
-import { View, Text, Pressable, Platform } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { HeliosColors, HeliosFonts, HeliosSpacing } from '@/constants/theme';
+import { triggerHaptic } from '@/lib/haptics';
+import { ACCENT_RIPPLE } from '@/lib/press-styles';
 
 type DateRangeValue = '7d' | '30d' | 'all';
 
@@ -17,15 +19,8 @@ const OPTIONS: { label: string; value: DateRangeValue }[] = [
 
 export function DateRangeSelector({ value, onChange }: DateRangeSelectorProps) {
   const handlePress = useCallback(
-    async (optionValue: DateRangeValue) => {
-      if (Platform.OS === 'ios') {
-        try {
-          const Haptics = await import('expo-haptics');
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        } catch {
-          // Haptics not available, silently continue
-        }
-      }
+    (optionValue: DateRangeValue) => {
+      triggerHaptic();
       onChange(optionValue);
     },
     [onChange],
@@ -40,6 +35,7 @@ export function DateRangeSelector({ value, onChange }: DateRangeSelectorProps) {
           <Pressable
             key={option.value}
             onPress={() => handlePress(option.value)}
+            android_ripple={ACCENT_RIPPLE}
             style={({ pressed }) => ({
               paddingHorizontal: 16,
               paddingVertical: 8,

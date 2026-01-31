@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, ScrollView, Pressable, Platform } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useFitnessData } from '@/hooks/use-fitness-data';
@@ -17,17 +17,10 @@ import HeartRateLineChart from '@/components/charts/heart-rate-line-chart';
 import { computeHRZones, downsampleHR } from '@/lib/data-transforms';
 import { formatFullDate, formatShortDate } from '@/lib/date-utils';
 import { formatNumber } from '@/lib/format-utils';
+import { triggerHaptic } from '@/lib/haptics';
+import { ACCENT_RIPPLE } from '@/lib/press-styles';
 
 const MAX_HR = 190;
-
-async function triggerHaptic() {
-  if (Platform.OS === 'ios') {
-    try {
-      const Haptics = await import('expo-haptics');
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {}
-  }
-}
 
 export default function HeartDayDetailScreen() {
   const { date } = useLocalSearchParams<{ date: string }>();
@@ -90,12 +83,16 @@ export default function HeartDayDetailScreen() {
       {/* Back button */}
       <Pressable
         onPress={() => { triggerHaptic(); router.back(); }}
-        style={{
+        android_ripple={ACCENT_RIPPLE}
+        style={({ pressed }) => ({
           marginTop: HeliosSpacing.xxl,
           marginBottom: HeliosSpacing.sm,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
+          alignSelf: 'flex-start',
+          paddingVertical: HeliosSpacing.xs,
+          paddingRight: HeliosSpacing.md,
+          opacity: pressed ? 0.6 : 1,
+          borderRadius: 8,
+        })}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           <Ionicons name="chevron-back" size={16} color={HeliosColors.accent} />

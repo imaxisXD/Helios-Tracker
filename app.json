@@ -6,12 +6,14 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "heliostracker",
-    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.imaxis.HeliosTracker",
+      "userInterfaceStyle": "dark"
     },
     "android": {
+      "userInterfaceStyle": "dark",
       "adaptiveIcon": {
         "backgroundColor": "#141414",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -19,7 +21,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.imaxis.HeliosTracker"
     },
     "web": {
       "output": "static",
@@ -33,16 +36,34 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#141414",
-          "dark": {
-            "backgroundColor": "#141414"
+          "backgroundColor": "#141414"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
           }
         }
-      ]
+      ],
+      [
+        "react-native-health-connect",
+        {
+          "requestPermissionsBackCompat": true
+        }
+      ],
+      "./plugins/with-health-connect-permissions"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "47f1a802-33cd-4c1a-8fdc-ca7aa2728730"
+      }
     }
   }
 }

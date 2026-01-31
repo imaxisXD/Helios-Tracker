@@ -28,6 +28,7 @@ import {
   formatTime,
   getRelativeDay,
 } from '@/lib/date-utils';
+import { CARD_RIPPLE, PRESS_SCALE } from '@/lib/press-styles';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -264,7 +265,14 @@ export default function ActivityScreen() {
 
               return (
                 <Link key={date} href={`/(activity)/day/${date}`} asChild>
-                  <Pressable>
+                  <Pressable
+                    android_ripple={CARD_RIPPLE}
+                    style={({ pressed }) => ({
+                      borderRadius: HeliosSpacing.cardRadius,
+                      overflow: 'hidden' as const,
+                      transform: [{ scale: pressed ? PRESS_SCALE : 1 }],
+                    })}
+                  >
                     {({ pressed }) => (
                       <BrutalistCard
                         style={{ opacity: pressed ? 0.92 : 1 }}

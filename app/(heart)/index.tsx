@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { View, Text, ScrollView, Pressable, Platform } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Link } from 'expo-router';
@@ -22,17 +22,10 @@ import { formatShortDate, getRelativeDay } from '@/lib/date-utils';
 import { formatBPM, formatNumber } from '@/lib/format-utils';
 import { ScoreRing } from '@/components/ui/score-ring';
 import { getStrainColor } from '@/lib/strain';
+import { triggerHaptic } from '@/lib/haptics';
+import { ACCENT_RIPPLE } from '@/lib/press-styles';
 
 const MAX_HR = 190;
-
-async function triggerHaptic() {
-  if (Platform.OS === 'ios') {
-    try {
-      const Haptics = await import('expo-haptics');
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {}
-  }
-}
 
 export default function HeartRateScreen() {
   const {
@@ -198,17 +191,29 @@ export default function HeartRateScreen() {
       >
         <Pressable
           onPress={handlePrev}
-          style={{
-            opacity: canGoBack ? 1 : 0.3,
+          android_ripple={ACCENT_RIPPLE}
+          style={({ pressed }) => ({
+            opacity: canGoBack ? (pressed ? 0.5 : 1) : 0.3,
             padding: HeliosSpacing.sm,
-          }}
+            borderRadius: 8,
+            overflow: 'hidden' as const,
+          })}
           disabled={!canGoBack}
         >
           <Ionicons name="chevron-back-sharp" size={24} color={HeliosColors.accent} />
         </Pressable>
 
         <Link href={`/(heart)/day/${selectedDate}`} asChild>
-          <Pressable>
+          <Pressable
+            android_ripple={ACCENT_RIPPLE}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.7 : 1,
+              paddingHorizontal: HeliosSpacing.md,
+              paddingVertical: HeliosSpacing.sm,
+              borderRadius: 8,
+              overflow: 'hidden' as const,
+            })}
+          >
             <View style={{ alignItems: 'center' }}>
               <Text
                 style={{
@@ -233,10 +238,13 @@ export default function HeartRateScreen() {
 
         <Pressable
           onPress={handleNext}
-          style={{
-            opacity: canGoForward ? 1 : 0.3,
+          android_ripple={ACCENT_RIPPLE}
+          style={({ pressed }) => ({
+            opacity: canGoForward ? (pressed ? 0.5 : 1) : 0.3,
             padding: HeliosSpacing.sm,
-          }}
+            borderRadius: 8,
+            overflow: 'hidden' as const,
+          })}
           disabled={!canGoForward}
         >
           <Ionicons name="chevron-forward-sharp" size={24} color={HeliosColors.accent} />
