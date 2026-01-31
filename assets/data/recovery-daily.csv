@@ -1,0 +1,4 @@
+user_id,date,recovery_score,rhr_bpm,hrv_rmssd,spo2_avg,temp_delta_c,sleep_debt_min,strain_prevday,source
+5009281522,2025-09-01,78,54,58.2,97,0.3,10,10.5,wearable
+5009281522,2025-09-02,72,55,55.4,96,0.1,25,11.2,wearable
+5009281522,2026-01-30,55,60,48.9,95,0.7,80,14.8,wearable

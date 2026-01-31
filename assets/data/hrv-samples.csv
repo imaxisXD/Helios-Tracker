@@ -1,0 +1,4 @@
+user_id,start_time,end_time,rmssd_ms,sdnn_ms,hr_avg,artifact_ratio,source,device
+5009281522,2025-09-01T14:00:00Z,2025-09-01T14:05:00Z,42.1,50.0,78,0.02,wearable,Amazfit GTS
+5009281522,2025-09-01T21:30:00Z,2025-09-01T21:35:00Z,38.6,46.8,82,0.04,wearable,Amazfit GTS
+5009281522,2026-01-30T09:10:00Z,2026-01-30T09:15:00Z,34.9,41.2,88,0.05,wearable,Amazfit GTS

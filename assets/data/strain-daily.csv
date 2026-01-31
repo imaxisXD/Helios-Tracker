@@ -1,0 +1,4 @@
+user_id,date,cardio_strain,muscular_strain,total_strain,zone_rest_min,zone_fatburn_min,zone_cardio_min,zone_peak_min,active_calories,source
+5009281522,2025-09-01,9.8,2.4,10.6,820,45,18,4,620,google_fit
+5009281522,2025-09-02,11.2,1.8,11.7,790,52,24,6,680,google_fit
+5009281522,2026-01-30,14.8,4.6,15.9,720,65,38,12,920,wearable

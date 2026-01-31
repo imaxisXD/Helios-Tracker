@@ -1,0 +1,4 @@
+user_id,date,rmssd_ms,sdnn_ms,ln_rmssd,measured_at,source,device,quality
+5009281522,2025-09-01,58.2,64.1,4.06,2025-09-01T06:10:00Z,wearable,Amazfit GTS,good
+5009281522,2025-09-02,55.4,60.3,4.01,2025-09-02T06:15:00Z,wearable,Amazfit GTS,good
+5009281522,2026-01-30,48.9,52.0,3.89,2026-01-30T06:05:00Z,wearable,Amazfit GTS,fair

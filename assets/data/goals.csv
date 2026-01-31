@@ -1,0 +1,4 @@
+goal_id,user_id,goal_type,target_value,target_unit,start_date,end_date,status,notes
+g-1,5009281522,steps,9000,steps,2025-09-01,2025-12-31,active,steady increase
+g-2,5009281522,sleep,7.5,hours,2025-09-01,2026-01-31,active,consistency focus
+g-3,5009281522,workouts,4,per_week,2026-01-01,2026-03-31,active,strength priority

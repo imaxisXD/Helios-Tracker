@@ -1,0 +1,4 @@
+user_id,date,weight_kg,body_fat_pct,lean_mass_kg,waist_cm,source,device
+5009281522,2025-09-01,67.0,20.5,53.2,78,wearable,Smart Scale
+5009281522,2025-09-02,66.8,20.4,53.1,78,wearable,Smart Scale
+5009281522,2026-01-30,67.4,20.9,53.0,79,wearable,Smart Scale

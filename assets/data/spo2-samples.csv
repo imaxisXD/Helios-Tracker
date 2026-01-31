@@ -1,0 +1,4 @@
+user_id,recorded_at,spo2_percent,measurement_type,source,device,quality
+5009281522,2025-09-01T06:12:00Z,97,nightly,wearable,Amazfit GTS,good
+5009281522,2025-09-02T06:18:00Z,96,nightly,wearable,Amazfit GTS,good
+5009281522,2026-01-30T06:07:00Z,95,nightly,wearable,Amazfit GTS,fair

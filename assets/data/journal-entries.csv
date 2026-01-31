@@ -1,0 +1,4 @@
+entry_id,user_id,date,time,tag,quantity,unit,notes,source
+je-20250901-1,5009281522,2025-09-01,09:15,caffeine,1,cup,black coffee,manual
+je-20250901-2,5009281522,2025-09-01,20:30,late_meal,1,meal,pasta,manual
+je-20260130-1,5009281522,2026-01-30,18:30,alcohol,1,drink,beer,manual

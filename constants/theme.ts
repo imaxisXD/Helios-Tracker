@@ -1,53 +1,110 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+export const HeliosColors = {
+  background: '#141414',
+  backgroundStripe: '#222222',
+  surface: '#1E1E1E',
+  cardLight: '#F2EFEA',
+  cardBorder: '#E5E1DC',
+  accent: '#A8FF00',
+  accentDim: 'rgba(168,255,0,0.12)',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#777777',
+  textOnCard: '#1A1A1A',
+  textOnCardMuted: '#666666',
+  heartRed: '#FF3B30',
+  sleepDeep: '#6D28D9',
+  sleepLight: '#C4B5FD',
+  sleepREM: '#8B5CF6',
+  wakeOrange: '#FF9500',
+  lineSubtle: '#333333',
+  lineOnCard: '#D0CCC7',
+  transparent: 'transparent',
+  recoveryGreen: '#00D26A',
+  recoveryYellow: '#FFD60A',
+  recoveryRed: '#FF453A',
+  strainLight: '#4CC9F0',
+  strainModerate: '#A8FF00',
+  strainHigh: '#FF9500',
+  strainAllOut: '#FF3B30',
+} as const;
 
-import { Platform } from 'react-native';
+export const HeliosFonts = {
+  display: 'BebasNeue-Regular',
+  mono: 'IBMPlexMono-Medium',
+  monoRegular: 'IBMPlexMono-Regular',
+  body: 'DMSans-Variable',
+  script: 'Caveat-Variable',
+} as const;
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+export const HeliosTypography = {
+  heroTitle: {
+    fontFamily: 'BebasNeue-Regular',
+    fontSize: 48,
+    lineHeight: 50,
+    letterSpacing: 1,
+  },
+  sectionTitle: {
+    fontFamily: 'BebasNeue-Regular',
+    fontSize: 32,
+    lineHeight: 36,
+    letterSpacing: 0.5,
+  },
+  cardTitle: {
+    fontFamily: 'BebasNeue-Regular',
+    fontSize: 22,
+    lineHeight: 26,
+    letterSpacing: 0.5,
+  },
+  metricLarge: {
+    fontFamily: 'IBMPlexMono-Medium',
+    fontSize: 36,
+    lineHeight: 40,
+    fontVariant: ['tabular-nums'] as ('tabular-nums')[],
+  },
+  metricMedium: {
+    fontFamily: 'IBMPlexMono-Medium',
+    fontSize: 24,
+    lineHeight: 28,
+    fontVariant: ['tabular-nums'] as ('tabular-nums')[],
+  },
+  metricSmall: {
+    fontFamily: 'IBMPlexMono-Medium',
+    fontSize: 14,
+    lineHeight: 18,
+    fontVariant: ['tabular-nums'] as ('tabular-nums')[],
+  },
+  label: {
+    fontFamily: 'IBMPlexMono-Medium',
+    fontSize: 11,
+    lineHeight: 14,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase' as const,
+  },
+  body: {
+    fontFamily: 'DMSans-Variable',
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  bodySmall: {
+    fontFamily: 'DMSans-Variable',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  script: {
+    fontFamily: 'Caveat-Variable',
+    fontSize: 28,
+    lineHeight: 32,
+  },
+} as const;
 
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
-};
-
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+export const HeliosSpacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 48,
+  screenPadding: 20,
+  cardPadding: 16,
+  cardRadius: 16,
+  cardGap: 12,
+} as const;

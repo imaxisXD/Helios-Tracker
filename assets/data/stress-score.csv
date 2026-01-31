@@ -1,0 +1,4 @@
+user_id,recorded_at,stress_score,hrv_rmssd,hr_bpm,confidence,source,device
+5009281522,2025-09-01T14:00:00Z,32.5,42.1,78,0.76,wearable,Amazfit GTS
+5009281522,2025-09-01T21:30:00Z,41.0,38.6,82,0.71,wearable,Amazfit GTS
+5009281522,2026-01-30T09:10:00Z,52.3,34.9,88,0.68,wearable,Amazfit GTS

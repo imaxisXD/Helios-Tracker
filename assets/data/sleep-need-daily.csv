@@ -1,0 +1,4 @@
+user_id,date,recommended_sleep_min,actual_sleep_min,sleep_debt_min,nap_min,bedtime_target,wake_target,source
+5009281522,2025-09-01,460,430,30,0,23:00,07:00,derived
+5009281522,2025-09-02,470,420,50,20,22:45,06:45,derived
+5009281522,2026-01-30,480,360,140,0,22:30,06:30,derived

@@ -1,0 +1,5 @@
+exercise_id,name,muscle_group,equipment,is_bodyweight
+ex-bench-press,Bench Press,chest,barbell,0
+ex-row,Seated Row,back,cable,0
+ex-squat,Back Squat,legs,barbell,0
+ex-plank,Plank,core,bodyweight,1

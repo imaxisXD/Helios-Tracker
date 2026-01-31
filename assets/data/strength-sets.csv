@@ -1,0 +1,6 @@
+set_id,workout_id,exercise_id,set_index,reps,weight,unit,rpe,rest_seconds,tempo,range_of_motion,completed
+ss-1,sw-20260130-1,ex-bench-press,1,8,60,kg,8,120,2-0-2,full,1
+ss-2,sw-20260130-1,ex-bench-press,2,6,65,kg,9,150,2-0-2,full,1
+ss-3,sw-20260130-1,ex-row,1,10,45,kg,7,90,2-1-2,full,1
+ss-4,sw-20260130-2,ex-squat,1,8,80,kg,8,150,3-0-1,full,1
+ss-5,sw-20260130-2,ex-squat,2,6,90,kg,9,180,3-0-1,full,1
